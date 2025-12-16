@@ -36,17 +36,19 @@ def xor_dechiffrer(texte_b64, cle):
     return ''.join(chr(b ^ ord(cle[i % len(cle)])) for i, b in enumerate(data))
 
 
+CLE = "MaSuperCleSecrete123"
+
+
 if __name__ == "__main__":
     # Démonstration
     print("=== Chiffrement XOR ===\n")
 
     message = input("Entrez le message à chiffrer: ")
-    cle = input("Entrez la clé: ")
 
     # Chiffrement
-    message_chiffre = xor_chiffrer(message, cle)
+    message_chiffre = xor_chiffrer(message, CLE)
     print(f"\nMessage chiffré (base64): {message_chiffre}")
 
     # Déchiffrement
-    message_dechiffre = xor_dechiffrer(message_chiffre, cle)
+    message_dechiffre = xor_dechiffrer(message_chiffre, CLE)
     print(f"Message déchiffré: {message_dechiffre}")
