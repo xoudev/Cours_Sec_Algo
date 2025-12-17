@@ -1,53 +1,42 @@
 """
 Algorithme de chiffrement XOR
 Simple et symétrique : même fonction pour chiffrer et déchiffrer
+Sans dépendance externe
 """
-
-import base64
-
-
-def xor_chiffrer(texte, cle):
-    """
-    Chiffre un texte avec XOR et retourne le résultat en base64
-
-    Args:
-        texte: Le message à chiffrer
-        cle: La clé de chiffrement
-
-    Returns:
-        Le texte chiffré encodé en base64
-    """
-    resultat = bytes([ord(c) ^ ord(cle[i % len(cle)]) for i, c in enumerate(texte)])
-    return base64.b64encode(resultat).decode()
-
-
-def xor_dechiffrer(texte_b64, cle):
-    """
-    Déchiffre un texte encodé en base64 avec XOR
-
-    Args:
-        texte_b64: Le message chiffré en base64
-        cle: La clé de déchiffrement
-
-    Returns:
-        Le texte déchiffré
-    """
-    data = base64.b64decode(texte_b64)
-    return ''.join(chr(b ^ ord(cle[i % len(cle)])) for i, b in enumerate(data))
-
 
 CLE = "MaSuperCleSecrete123"
 
 
+def xor_chiffrer(texte, cle):
+    """
+    Chiffre un texte avec XOR et retourne le résultat en hexadécimal
+    """
+    resultat = ""
+    for i, c in enumerate(texte):
+        xor_val = ord(c) ^ ord(cle[i % len(cle)])
+        resultat += format(xor_val, '02x')
+    return resultat
+
+
+def xor_dechiffrer(texte_hex, cle):
+    """
+    Déchiffre un texte hexadécimal avec XOR
+    """
+    resultat = ""
+    for i in range(0, len(texte_hex), 2):
+        byte_val = int(texte_hex[i:i+2], 16)
+        resultat += chr(byte_val ^ ord(cle[(i // 2) % len(cle)]))
+    return resultat
+
+
 if __name__ == "__main__":
-    # Démonstration
     print("=== Chiffrement XOR ===\n")
 
     message = input("Entrez le message à chiffrer: ")
 
     # Chiffrement
     message_chiffre = xor_chiffrer(message, CLE)
-    print(f"\nMessage chiffré (base64): {message_chiffre}")
+    print(f"\nMessage chiffré: {message_chiffre}")
 
     # Déchiffrement
     message_dechiffre = xor_dechiffrer(message_chiffre, CLE)
